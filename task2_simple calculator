@@ -1,0 +1,212 @@
+*index.html*
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="btn operation" onclick="clearDisplay()">C</button>
+            <button class="btn operation" onclick="setOperation('/')">/</button>
+            <button class="btn operation" onclick="setOperation('*')">*</button>
+            <button class="btn operation" onclick="setOperation('-')">-</button>
+            <button class="btn" onclick="inputValue('7')">7</button>
+            <button class="btn" onclick="inputValue('8')">8</button>
+            <button class="btn" onclick="inputValue('9')">9</button>
+            <button class="btn operation" onclick="setOperation('+')">+</button>
+            <button class="btn" onclick="inputValue('4')">4</button>
+            <button class="btn" onclick="inputValue('5')">5</button>
+            <button class="btn" onclick="inputValue('6')">6</button>
+            <button class="btn equal" onclick="calculate()">=</button>
+            <button class="btn" onclick="inputValue('1')">1</button>
+            <button class="btn" onclick="inputValue('2')">2</button>
+            <button class="btn" onclick="inputValue('3')">3</button>
+            <button class="btn" onclick="inputValue('0')">0</button>
+            <button class="btn" onclick="inputValue('.')">.</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+*styles.css*
+
+/* styles.css */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.calculator {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 320px;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.display {
+    background-color: #333;
+    color: #fff;
+    text-align: right;
+    padding: 20px;
+    font-size: 2.5em;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid #ccc;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    padding: 1px;
+    background-color: #ccc;
+}
+
+.btn {
+    padding: 20px;
+    background-color: #eaeaea;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ddd;
+}
+
+.btn:active {
+    background-color: #bbb;
+}
+
+.btn.operation {
+    background-color: #f9a825;
+    color: #fff;
+}
+
+.btn.operation:hover {
+    background-color: #f57f17;
+}
+
+.btn.operation:active {
+    background-color: #ef6c00;
+}
+
+.btn.equal {
+    background-color: #29b6f6;
+    color: #fff;
+    grid-column: span 2;
+}
+
+.btn.equal:hover {
+    background-color: #039be5;
+}
+
+.btn.equal:active {
+    background-color: #0288d1;
+}
+
+
+
+
+*script.js*
+
+
+// script.js
+let display = document.getElementById('display');
+let currentInput = '';
+let currentOperation = null;
+let firstOperand = null;
+
+function clearDisplay() {
+    currentInput = '';
+    currentOperation = null;
+    firstOperand = null;
+    display.innerText = '0';
+}
+
+function inputValue(value) {
+    if (currentInput === '' && value === '0') {
+        return;
+    }
+    currentInput += value;
+    display.innerText = currentInput;
+}
+
+function calculate() {
+    if (currentInput === '' || currentOperation === null) {
+        return;
+    }
+
+    let secondOperand = parseFloat(currentInput);
+    let result;
+    
+    switch (currentOperation) {
+        case '+':
+            result = firstOperand + secondOperand;
+            break;
+        case '-':
+            result = firstOperand - secondOperand;
+            break;
+        case '*':
+            result = firstOperand * secondOperand;
+            break;
+        case '/':
+            if (secondOperand === 0) {
+                alert("Cannot divide by zero");
+                clearDisplay();
+                return;
+            }
+            result = firstOperand / secondOperand;
+            break;
+        default:
+            return;
+    }
+    
+    display.innerText = result;
+    currentInput = '';
+    firstOperand = null;
+    currentOperation = null;
+}
+
+function inputValue(value) {
+    if (currentInput === '' && value === '0') {
+        return;
+    }
+    currentInput += value;
+    display.innerText = currentInput;
+}
+
+function setOperation(operation) {
+    if (currentInput === '') {
+        return;
+    }
+    
+    firstOperand = parseFloat(currentInput);
+    currentOperation = operation;
+    currentInput = '';
+}
